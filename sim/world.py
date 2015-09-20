@@ -57,79 +57,33 @@ class GridIntersectionPool(object):
         return possible
 
 
-class WalkMode(Enum):
-    NORTH = 0,
-    EAST = 1
+class StreetGrid(object):
+    @staticmethod
+    def with_dimensions(width, height):
+        sts_NS = ['North-South Rd. {}'.format(i+1) for i in range(width)]
+        sts_EW = ['East-West Rd. {}'.format(i+1) for i in range(height)]
+        return StreetGrid(sts_NS, sts_EW)
 
-
-class RouteTracker(object):
-    def __init__(self, width, height):
-        self.sts_NS = ['North-South Rd. {}'.format(i+1) for i in range(width)]
-        self.sts_EW = ['East-West Rd. {}'.format(i+1) for i in range(height)]
+    def __init__(self, sts_NS, sts_EW):
+        self.sts_NS = sts_NS
+        self.sts_EW = sts_EW
         self.intersectionpool = GridIntersectionPool(self.sts_NS, self.sts_EW)
-        self._n = 1
-        self._e = 1
-        self._n_max = height
-        self._e_max = width
-        self._cross_n = False
-        self._cross_e = False
-        self._walkmode = random.choice([WalkMode.NORTH, WalkMode.EAST])
 
-    def intersection(self):
-        return self.intersectionpool.getat(self._get_EW_st(), self._get_NS_st())
+    def width(self):
+        return len(self.sts_NS)
 
-    def going_north(self):
-        return self._walkmode == WalkMode.NORTH
+    def height(self):
+        return len(self.sts_EW)
 
-    def going_east(self):
-        return self._walkmode == WalkMode.EAST
+    def get_NS_st(self, n):
+        if n > self.width:
+            raise ValueError("Requested street {} greater than number of streets {}".format(n, self.width))
+        return self.sts_NS[n-1]
 
-    def turn(self):
-        self._walkmode = WalkMode.EAST if self.going_north() else WalkMode.NORTH
+    def get_EW_st(self, n):
+        if n > self.height:
+            raise ValueError("Requested street {} greater than number of streets {}".format(n, self.height))
+        return self.sts_EW[n-1]
 
-    def must_cross(self):
-        return self._cross_n if self.going_north() else self._cross_e
-
-    def green_light(self):
-        intersectn = self.intersection()
-        if self.going_north():
-            return intersectn.green(self._get_EW_st())
-        else:
-            return intersectn.green(self._get_NS_st())
-
-    def cross(self):
-        if self.going_north():
-            self._cross_n = False
-        else:
-            self._cross_e = False
-
-    def has_next_east(self):
-        return self._e <= self._e_max
-
-    def has_next_north(self):
-        return self._n <= self._n_max
-
-    def next_block(self):
-        return self._next_north() if self.going_north() else self._next_east()
-
-    def _next_east(self):
-        if not self.has_next_east():
-            raise StopIteration("End of Grid. Cannot go further east")
-        st = self._get_EW_st()
-        self._e += 1
-        self._cross_e = True
-        return st
-
-    def _next_north(self):
-        if not self.has_next_north():
-            raise StopIteration("End of Grid. Cannot go further north")
-        st = self._get_NS_st()
-        self._n += 1
-        self._cross_n = True
-        return st
-
-    def _get_NS_st(self):
-        return self.sts_NS[self._e]
-
-    def _get_EW_st(self):
-        return self.sts_EW[self._n]
+    def get_intersection(self, n, e):
+        return self.intersectionpool.getat(self.get_EW_st(n), self.get_NS_st(e))

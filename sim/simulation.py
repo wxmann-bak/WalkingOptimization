@@ -36,24 +36,3 @@ def algorithm_ideal(routetracker, timekeeper):
         timekeeper.track_walk_block()
 
     return timekeeper.output_time()
-
-
-class TimeKeeper(object):
-
-    def __init__(self, cross_street, cross_block, intersection_wait):
-        self._time = 0
-        self._cross_street = cross_street
-        self._cross_block = cross_block
-        self._intersection_wait = intersection_wait
-
-    def track_wait(self):
-        self._time += self._intersection_wait
-
-    def track_cross(self):
-        self._time += self._cross_street
-
-    def track_walk_block(self):
-        self._time += self._cross_block
-
-    def output_time(self):
-        return self._time

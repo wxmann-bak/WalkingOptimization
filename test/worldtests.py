@@ -39,11 +39,11 @@ class IntersectionPoolTests(unittest.TestCase):
         st2 = random.choice(self.sts_EW)
         return Intersection(st1, st2)
 
-    def test_get_all_intersections(self):
-        all_intersections = self.intersectionpool.all()
-        self.assertEqual(len(all_intersections), len(self.sts_EW) * len(self.sts_NS))
-        for i in range(5):
-            self.assertIn(self._random_intersection(), all_intersections)
+    # def test_get_all_intersections(self):
+    #     all_intersections = self.intersectionpool.all()
+    #     self.assertEqual(len(all_intersections), len(self.sts_EW) * len(self.sts_NS))
+    #     for i in range(5):
+    #         self.assertIn(self._random_intersection(), all_intersections)
 
 # TODO: add test for getting intersection that does not existZ
     def test_get_one_intersection(self):
@@ -51,8 +51,8 @@ class IntersectionPoolTests(unittest.TestCase):
         intersection_expected = Intersection('B', '2')
         self.assertEqual(intersection_expected, intersection_returned)
 
-    def test_filter_intersection(self):
-        filtered = self.intersectionpool.filter_street('B')
-        expected_dict = {'1': Intersection('B', '1'), '2': Intersection('B', '2'), '3': Intersection('B', '3')}
-        self.assertDictEqual(filtered, expected_dict)
+    # def test_filter_intersection(self):
+    #     filtered = self.intersectionpool.filter_street('B')
+    #     expected_dict = {'1': Intersection('B', '1'), '2': Intersection('B', '2'), '3': Intersection('B', '3')}
+    #     self.assertDictEqual(filtered, expected_dict)
 
