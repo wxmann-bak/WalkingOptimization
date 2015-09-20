@@ -25,9 +25,6 @@ class Intersection(object):
         cross_st2 = randomlight()
         self._lights = {st1: switchlight(cross_st2), st2: cross_st2}
 
-    # def swaplight(self):
-    #     self._lights = {st: switchlight(light) for st, light in self._lights.items()}
-
     def green(self, st):
         return self.lightat(st) == TrafficLight.GREEN
 
@@ -70,8 +67,8 @@ class RouteTracker(object):
         self.sts_NS = ['North-South Rd. {}'.format(i+1) for i in range(width)]
         self.sts_EW = ['East-West Rd. {}'.format(i+1) for i in range(height)]
         self.intersectionpool = GridIntersectionPool(self.sts_NS, self.sts_EW)
-        self._n = 0
-        self._e = 0
+        self._n = 1
+        self._e = 1
         self._n_max = height
         self._e_max = width
         self._cross_n = False
@@ -107,10 +104,10 @@ class RouteTracker(object):
             self._cross_e = False
 
     def has_next_east(self):
-        return self._e < self._e_max
+        return self._e <= self._e_max
 
     def has_next_north(self):
-        return self._n < self._n_max
+        return self._n <= self._n_max
 
     def next_block(self):
         return self._next_north() if self.going_north() else self._next_east()
@@ -118,16 +115,18 @@ class RouteTracker(object):
     def _next_east(self):
         if not self.has_next_east():
             raise StopIteration("End of Grid. Cannot go further east")
+        st = self._get_EW_st()
         self._e += 1
         self._cross_e = True
-        return self._get_EW_st()
+        return st
 
     def _next_north(self):
         if not self.has_next_north():
             raise StopIteration("End of Grid. Cannot go further north")
+        st = self._get_NS_st()
         self._n += 1
         self._cross_n = True
-        return self._get_NS_st()
+        return st
 
     def _get_NS_st(self):
         return self.sts_NS[self._e]
