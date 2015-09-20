@@ -51,18 +51,6 @@ class GridIntersectionPool(object):
         self.intersections = {(st_NS, st_EW): Intersection(st_NS, st_EW) for st_NS in sts_northsouth
                               for st_EW in sts_eastwest}
 
-    def filter_street(self, st):
-        filtered = {}
-        for (st1, st2) in self.intersections:
-            if st == st1:
-                filtered[st2] = self.intersections[(st1, st2)]
-            elif st == st2:
-                filtered[st1] = self.intersections[(st1, st2)]
-        return filtered
-
-    def all(self):
-        return self.intersections.values()
-
     def getat(self, st1, st2):
         possible = self.intersections.get((st1, st2))
         if not possible:
