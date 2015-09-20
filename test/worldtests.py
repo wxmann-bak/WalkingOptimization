@@ -11,14 +11,6 @@ class IntersectionTests(unittest.TestCase):
         self.st2 = 'B'
         self.intersection = Intersection(self.st1, self.st2)
 
-    # def test_should_swap_light(self):
-    #     light1 = self.intersection.lightat(self.st1)
-    #     light2 = self.intersection.lightat(self.st2)
-    #     self.intersection.swaplight()
-    #
-    #     self.assertNotEqual(self.intersection.lightat(self.st1), light1)
-    #     self.assertNotEqual(self.intersection.lightat(self.st2), light2)
-
     def test_should_go_if_green(self):
         light1 = self.intersection.lightat(self.st1)
 

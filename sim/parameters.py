@@ -1,6 +1,5 @@
 __author__ = 'tangz'
 
-
 def streetwidth(lanes, lanewidth=12, unit='ft'):
     total_width = lanes * lanewidth
     if unit == 'ft':

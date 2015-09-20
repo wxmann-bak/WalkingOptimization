@@ -118,26 +118,11 @@ class RouteTracker(object):
         else:
             self._cross_e = False
 
-    def has_next(self):
-        return self._n < self._n_max if self.going_north() else self._e < self._e_max
+    def has_next_east(self):
+        return self._e < self._e_max
 
-    # def can_cross_north(self):
-    #     return self._cross_n
-    #
-    # def can_cross_east(self):
-    #     return self._cross_e
-
-    # def cross_north(self):
-    #     self._cross_n = False
-    #
-    # def cross_east(self):
-    #     self._cross_e = False
-
-    # def has_next_east(self):
-    #     return self._e < self._e_max
-    #
-    # def has_next_north(self):
-    #     return self._n < self._n_max
+    def has_next_north(self):
+        return self._n < self._n_max
 
     def next_block(self):
         return self._next_north() if self.going_north() else self._next_east()
