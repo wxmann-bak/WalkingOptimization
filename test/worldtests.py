@@ -1,6 +1,6 @@
 import random
 import unittest
-from sim.world import Intersection, TrafficLight, GridIntersectionPool
+from sim.world import Intersection, TrafficLight, GridIntersectionPool, StreetGrid
 
 __author__ = 'tangz'
 
@@ -15,11 +15,11 @@ class IntersectionTests(unittest.TestCase):
         light1 = self.intersection.lightat(self.st1)
 
         if light1 == TrafficLight.GREEN:
-            self.assertTrue(self.intersection.go(self.st1))
-            self.assertFalse(self.intersection.go(self.st2))
+            self.assertTrue(self.intersection.green(self.st1))
+            self.assertFalse(self.intersection.green(self.st2))
         else:
-            self.assertTrue(self.intersection.go(self.st2))
-            self.assertFalse(self.intersection.go(self.st1))
+            self.assertTrue(self.intersection.green(self.st2))
+            self.assertFalse(self.intersection.green(self.st1))
 
     def test_should_be_equal(self):
         test_intersection = Intersection(self.st1, self.st2)
@@ -39,20 +39,38 @@ class IntersectionPoolTests(unittest.TestCase):
         st2 = random.choice(self.sts_EW)
         return Intersection(st1, st2)
 
-    # def test_get_all_intersections(self):
-    #     all_intersections = self.intersectionpool.all()
-    #     self.assertEqual(len(all_intersections), len(self.sts_EW) * len(self.sts_NS))
-    #     for i in range(5):
-    #         self.assertIn(self._random_intersection(), all_intersections)
-
 # TODO: add test for getting intersection that does not existZ
     def test_get_one_intersection(self):
         intersection_returned = self.intersectionpool.getat('B', '2')
         intersection_expected = Intersection('B', '2')
         self.assertEqual(intersection_expected, intersection_returned)
 
-    # def test_filter_intersection(self):
-    #     filtered = self.intersectionpool.filter_street('B')
-    #     expected_dict = {'1': Intersection('B', '1'), '2': Intersection('B', '2'), '3': Intersection('B', '3')}
-    #     self.assertDictEqual(filtered, expected_dict)
+
+class StreetGridTests(unittest.TestCase):
+    def setUp(self):
+        self.sts_EW_1 = ['A', 'B', 'C']
+        self.sts_NS_1 = ['1', '2', '3', '4']
+        self.grid_from_sts = StreetGrid(self.sts_NS_1, self.sts_EW_1)
+
+        self.height = 5
+        self.width = 3
+        self.grid_from_static = StreetGrid.with_dimensions(self.width, self.height)
+
+    def test_should_get_height_width(self):
+        self.assertEqual(self.grid_from_sts.height(), 3)
+        self.assertEqual(self.grid_from_sts.width(), 4)
+
+        self.assertEqual(self.grid_from_static.height(), self.height)
+        self.assertEqual(self.grid_from_static.width(), self.width)
+
+    def test_should_get_intersection(self):
+        intersection = self.grid_from_sts.get_intersection(2, 1)
+        self.assertEquals(intersection, Intersection('B','1'))
+
+# TODO: add negative cases for get
+    def test_should_get_street(self):
+        st1 = self.grid_from_sts.get_EW_st(2)
+        st2 = self.grid_from_sts.get_NS_st(3)
+        self.assertEqual(st1, 'B')
+        self.assertEqual(st2, '3')
 

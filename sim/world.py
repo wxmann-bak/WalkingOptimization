@@ -76,12 +76,12 @@ class StreetGrid(object):
         return len(self.sts_EW)
 
     def get_NS_st(self, n):
-        if n > self.width:
+        if n > self.width():
             raise ValueError("Requested street {} greater than number of streets {}".format(n, self.width))
         return self.sts_NS[n-1]
 
     def get_EW_st(self, n):
-        if n > self.height:
+        if n > self.height():
             raise ValueError("Requested street {} greater than number of streets {}".format(n, self.height))
         return self.sts_EW[n-1]
 
